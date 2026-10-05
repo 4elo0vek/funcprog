@@ -15,6 +15,6 @@ def top_word(freq: dict[str, int]) -> Optional[str]:
     return max(freq, key=freq.get, default=None)
 
 
-print("Слова:", split_words("Еду на кг, Илюша уже там. Этот добрый парень готов хантить местных дам. (кг)"))
-print("Частоты:", count_word_frequencies(split_words("Еду на кг, Илюша уже там. Этот добрый парень готов хантить местных дам. (кг)")))
-print("Самое частое слово:", top_word(count_word_frequencies(split_words("Еду на кг, Илюша уже там. Этот добрый парень готов хантить местных дам. (кг)"))))
+print("Слова:", split_words(",д,д, ...д"))
+print("Частоты:", count_word_frequencies(split_words(",д,д, ...д")))
+print("Самое частое слово:", top_word(count_word_frequencies(split_words(",д,д, ...д"))))

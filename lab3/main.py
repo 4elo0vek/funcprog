@@ -33,7 +33,7 @@ def tire_load_users(users: list[User]) -> Result[list[User], str]:
 
 
 print("Загрузка пользователей:", tire_load_users([
-    User("Илья", 21, "ravluk@mail.ru"),
-    User("Влад", 25, "vladick@mail.ru"),
-    User("Мегарыцарь", 19, "megaknight@supercell.com"),
+    User("Илья", 19, "ravluk@mail.ru"),
+    User("Влад", 20, "vladick@mail.ru"),
+    User("Мегарыцарь", 16, "megaknight@supercell.com"),
 ]))

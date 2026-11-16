@@ -11,7 +11,7 @@ PRODUCTS = (
 NUMBERS = (3, 15, 7, 42, 0, 10, 99, -5)
 
 # уровень 1
-FILTER_BY = lambda key: lambda value: lambda items: list(
+FILTER_BY = lambda key: lambda value: lambda items: (
     filter(lambda item: item[key] == value, items)
 )
 
@@ -26,6 +26,6 @@ FILTER_BY_CATEGORY = partial(UNCURRY_3(FILTER_BY), "category")
 GREATER_THAN = lambda threshold: lambda x: x > threshold
 
 
-print("Уровень 1:", FILTER_BY("category")("смартфон")(PRODUCTS))
-print("Уровень 2:", FILTER_BY_CATEGORY("ноутбук", PRODUCTS))
+print("Уровень 1:", list(FILTER_BY("category")("смартфон")(PRODUCTS)))
+print("Уровень 2:", list(FILTER_BY_CATEGORY("ноутбук", PRODUCTS)))
 print("Уровень 3:", list(filter(GREATER_THAN(10), NUMBERS)))

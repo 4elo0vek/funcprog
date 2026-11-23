@@ -1,4 +1,7 @@
-from functools import reduce
+# /// script
+# dependencies = ["toolz==1.2.0"]
+# ///
+from toolz.curried import cons, filter, map, merge_with, reduce
 
 
 STUDENTS = (
@@ -10,27 +13,37 @@ STUDENTS = (
 )
 
 # уровень 1
-GRADE_LINES = lambda students: map(
-    lambda student: f"Имя: {student['name']}, Оценка: {student['grade']}",
-    students,
+GRADE_LINES = map(
+    lambda student: f"Имя: {student['name']}, Оценка: {student['grade']}"
 )
 
 # уровень 2
-ABOVE_FOUR = lambda students: filter(lambda student: student["grade"] > 4.0, students)
+ABOVE_FOUR = filter(lambda student: student["grade"] > 4.0)
 
 # уровень 3
-MEAN = lambda total, count: total / count if count else None
+# Каждый студент добавляет свой возраст к сумме и единицу к количеству.
+AGE_COUNTS = map(lambda student: {"total": student["age"], "count": 1})
+MEAN = lambda total: lambda count: total / count if count else None
 
-AVERAGE_AGE_ABOVE_FOUR = lambda students: lambda: MEAN(
-    *reduce(
-        lambda totals, student: (totals[0] + student["age"], totals[1] + 1),
-        ABOVE_FOUR(students),
-        (0, 0),
-    )
+# cons ставит нулевые суммы в начало. merge_with(sum) складывает одноимённые поля.
+AGE_TOTALS = lambda students: reduce(merge_with(sum))(
+    cons({"total": 0, "count": 0})(AGE_COUNTS(students))
 )
 
+# Только вызов второй лямбды запускает reduce и чтение отобранных записей.
+AVERAGE_AGE_ABOVE_FOUR = lambda students: lambda: (
+    lambda totals: MEAN(totals["total"])(totals["count"])
+)(AGE_TOTALS(ABOVE_FOUR(students)))
 
-print("Уровень 1. Все студенты", *GRADE_LINES(STUDENTS), sep="\n")
-print("\nУровень 2. Оценка выше 4.0", *GRADE_LINES(ABOVE_FOUR(STUDENTS)), sep="\n")
-print("\nУровень 3. Средний возраст отобранных студентов", AVERAGE_AGE_ABOVE_FOUR(STUDENTS)(), sep="\n")
 
+def main():
+    print("Уровень 1. Все студенты")
+    print("\n".join(GRADE_LINES(STUDENTS)))
+    print("\nУровень 2. Оценка выше 4.0")
+    print("\n".join(GRADE_LINES(ABOVE_FOUR(STUDENTS))))
+    print("\nУровень 3. Средний возраст отобранных студентов")
+    print(AVERAGE_AGE_ABOVE_FOUR(STUDENTS)())
+
+
+if __name__ == "__main__":
+    main()
